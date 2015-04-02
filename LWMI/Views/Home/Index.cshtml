@@ -1,0 +1,68 @@
+﻿@model dynamic
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>Colabiture: A collaborative literature writing tool</title>
+        <meta charset='utf-8'>
+        <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="~/Content/jquery.notebook.css">
+         <link rel="stylesheet" type="text/css" href="~/Content/jBox.css">
+		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
+    </head>
+    <body>
+	<nav class="navbar navbar-default">
+	<div class="container">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="@Url.Action("Index","Bucket")">Colablitrue</a>
+		</div>
+		<form class="navbar-form navbar-right" role="search">
+			<button id="SaveButton"type="button" class="btn btn-default">
+					<span class="glyphicon glyphicon-floppy-disk"></span>
+			</button>
+			<button type="button" class="btn btn-default">
+					<span class="glyphicon glyphicon-thumbs-up"></span>
+			</button>
+		</form>
+	</div>
+	</nav>
+	<div class="container" style="padding-top: 0px;">
+        <div class="editor">
+            @Html.Raw(ViewBag.Text)
+        </div>
+	</div>
+        <script type="text/javascript" src="~/Content/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript" src="~/Content/jquery.notebook.js"></script>
+        <script type="text/javascript" src="~/Content/jBox.min.js"></script>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('.editor').notebook({
+                    autoFocus: true,
+                    placeholder: ' ',
+                    modifiers: []
+                });
+                $("#SaveButton").click(function () {
+                    $.ajax({
+                        url: '/home/post/?key=@ViewBag.Key',
+                        type: 'post',
+                        dataType: 'json',
+                        complete: function (data) {
+                            new jBox('Notice', {
+                                content: 'Save Successful',
+                                attributes: { // Notices have a fixed position, that's why you need to change the attribute option to move them
+                                    x: 'right',
+                                    y: 'bottom'
+                                },
+                                color: 'green',
+                                fade: '1000',
+                                autoClose: 2000
+                            });
+                        },
+                        data: $('.editor').html()
+                    });
+                    
+                });
+            });
+        </script>
+    </body>
+</html>

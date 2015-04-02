@@ -1,0 +1,64 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = "title";
+}
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>Colabiture: A collaborative literature writing tool</title>
+        <meta charset='utf-8'>
+        <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="~/Content/jquery.notebook.css">
+        <link rel="stylesheet" type="text/css" href="~/Content/jBox.css">
+        <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
+    </head>
+    <body>        
+        <nav class="navbar navbar-default">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="@Url.Action("Index","Bucket")">Colablitrue</a>
+                </div>
+                <form class="navbar-form navbar-right" role="search">
+                    <button type="button" class="btn btn-default">
+                        <span class="glyphicon glyphicon-thumbs-up"></span>
+                    </button>
+                </form>
+            </div>
+        </nav>
+        <div class="container" style="padding-top: 0px;">
+            @foreach (var keystring in ViewBag.keys)
+            {
+                <div>
+                    <a href="@Url.Action("Index","Home", new { key = keystring})">@Html.Raw(keystring)</a>
+                </div>
+            }
+            <span id="createButton" class="btn btn-primary">Create New</span>
+        </div>
+        <div style="display: none" id="grabMe">
+            <input type="text" id="keyName" style="width: 100%"/>
+            <button id="SaveButton" class="btn btn-primary" style="width: 100%">Create</button>
+        </div>
+        <script type="text/javascript" src="~/Content/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript" src="~/Content/jBox.min.js"></script>
+        <script>
+            $(document).ready(function() {
+                    new jBox('Modal', {
+                        attach: $('#createButton'),
+                        width: 180,
+                        height: 100,
+                        title: 'Create new work',
+                        overlay: false,
+                        createOnInit: true,
+                        content: $('#grabMe')
+                    });
+                    $("#SaveButton").click(function () {
+                        console.log('#SaveButton was clicked');
+                        window.location = '@Url.Action( "Index", "Home" ,null, Request.Url.Scheme)'
+                            + '?key='
+                            + $('#keyName').val().replace(/ /g, '');
+                });
+            });
+        </script>
+    </body>
+</html>
